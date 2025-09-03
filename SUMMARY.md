@@ -2,38 +2,38 @@
 
 * [Executive Summary](README.md)
 
-## Core Concepts
+## Core Technology
 
-* [Introduction](introduction.md)
-* [Architecture](architecture.md)
+* [Technical Architecture](technical-architecture.md)
 * [AI System](ai-system.md)
+* [Scoring Methodology](scoring-methodology.md)
 
 ## Trading Protocol
 
 * [Trading Mechanisms](trading-mechanisms.md)
 * [Order Types](order-types.md)
-* [Liquidity Aggregation](liquidity.md)
+* [Market Integration](market-integration.md)
 
-## Technical Infrastructure
+## Platform Features
 
-* [Security](security.md)
-* [Blockchain Integration](blockchain.md)
-* [API Reference](api-reference.md)
+* [Current Features](current-features.md)
+* [API Documentation](api-documentation.md)
+* [Security Measures](security.md)
 
-## Economic Model
+## Business & Growth
 
-* [Tokenomics](tokenomics.md)
-* [Fee Structure](fees.md)
-* [Incentive Design](incentives.md)
+* [Market Opportunity](market-opportunity.md)
+* [Revenue Model](revenue-model.md)
+* [Growth Strategy](growth-strategy.md)
 
-## Governance & Future
+## Vision & Roadmap
 
-* [Governance](governance.md)
+* [AGI Vision](agi-vision.md)
 * [Roadmap](roadmap.md)
-* [Risk Analysis](risk-analysis.md)
+* [Press & Recognition](press.md)
 
 ## Appendix
 
 * [Technical Specifications](technical-specs.md)
 * [Glossary](glossary.md)
-* [References](references.md)
+* [Demo & Resources](resources.md)
