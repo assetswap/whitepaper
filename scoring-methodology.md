@@ -223,6 +223,54 @@ else if (change > 0%)   → 10 points  // Growing interest
 else                    → 5 points   // Declining interest
 ```
 
+### 6. Maturity Score (0-100)
+
+Assesses market establishment and token maturity level.
+
+#### Calculation Breakdown
+
+**Market Cap Tier (40% weight)**
+```javascript
+if (marketCap >= $100,000,000)  → 40 points  // Established
+else if (marketCap >= $50,000,000)  → 35 points  // Mature
+else if (marketCap >= $10,000,000)  → 30 points  // Growing
+else if (marketCap >= $1,000,000)   → 20 points  // Emerging
+else if (marketCap >= $100,000)     → 10 points  // Early
+else                                → 5 points   // Very early/risky
+```
+
+**Supply Distribution (30% weight)**
+```javascript
+// Top 10 holder concentration (15% of 30%)
+if (top10SupplyPercent <= 30%)  → 15 points  // Excellent distribution
+else if (top10SupplyPercent <= 50%)  → 12 points  // Good distribution
+else if (top10SupplyPercent <= 70%)  → 8 points   // Acceptable
+else                                  → 3 points   // Concerning concentration
+
+// Top 100 holder concentration (15% of 30%)
+if (top100SupplyPercent <= 80%)  → 15 points  // Healthy spread
+else if (top100SupplyPercent <= 90%) → 10 points  // Moderate concentration
+else                                  → 5 points   // High concentration
+```
+
+**FDV vs Market Cap Ratio (20% weight)**
+```javascript
+ratio = marketCap / fullyDilutedValue
+
+if (ratio >= 0.9)       → 20 points  // Fully diluted (low inflation risk)
+else if (ratio >= 0.7)  → 15 points  // Mostly circulating
+else if (ratio >= 0.5)  → 10 points  // Moderate circulation
+else                    → 5 points   // Low circulation (high inflation risk)
+```
+
+**Holder Count Maturity (10% weight)**
+```javascript
+if (totalHolders >= 5000)  → 10 points  // Mature holder base
+else if (totalHolders >= 1000)  → 8 points   // Growing holder base
+else if (totalHolders >= 500)   → 6 points   // Emerging holder base
+else                            → 3 points   // Small holder base
+```
+
 ## Overall Score Calculation
 
 ### Weighted Average Method
@@ -232,9 +280,10 @@ function calculateOverallScore(scores) {
     const weights = {
         liquidityScore: 0.25,   // 25% weight
         activityScore: 0.20,    // 20% weight
-        communityScore: 0.20,   // 20% weight
-        securityScore: 0.25,    // 25% weight
-        momentumScore: 0.10     // 10% weight
+        momentumScore: 0.20,    // 20% weight (updated)
+        communityScore: 0.15,   // 15% weight (updated)
+        securityScore: 0.15,    // 15% weight (updated)
+        maturityScore: 0.05     // 5% weight
     };
     
     let totalScore = 0;

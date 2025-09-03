@@ -72,15 +72,16 @@ We're building toward complete financial autonomy:
 
 ### Transparent Token Scoring
 
-Our AGI evaluates tokens across five dimensions, producing scores from 0-100:
+Our AGI evaluates tokens across six dimensions, producing scores from 0-100:
 
 | Score Component | Weight | What It Measures |
 |----------------|--------|------------------|
-| **Liquidity** | 25% | Market depth, trading volume, stability |
-| **Activity** | 20% | Trading frequency, unique wallets, buy/sell balance |
-| **Community** | 20% | Holder count, distribution health, growth trends |
-| **Security** | 25% | Contract audits, risk indicators, safety features |
-| **Momentum** | 10% | Price trends, volume changes, trader interest |
+| **Liquidity** | 25% | Market depth ($10K-$1M+ scale), trading volume, stability |
+| **Activity** | 20% | Multi-timeframe trades (1h/4h/24h), unique wallets, buy/sell ratio |
+| **Momentum** | 20% | Price trends, volume changes, trader interest growth |
+| **Community** | 15% | Holder count (100-10K+ scale), distribution health, growth |
+| **Security** | 15% | Contract audits, risk indicators, safety features |
+| **Maturity** | 5% | Market cap tier, supply distribution, FDV ratio |
 
 **Performance Validation:**
 - 80% win rate on recommended tokens over 30 days
