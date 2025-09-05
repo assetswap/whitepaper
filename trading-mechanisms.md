@@ -1,12 +1,8 @@
----
-icon: chart-line
----
-
 # Trading Mechanisms
 
 ## Overview
 
-AssetSwap's trading mechanisms represent a revolutionary approach to decentralized trading, combining advanced order types, intelligent liquidity aggregation, and sophisticated execution strategies. Our system enables institutional-grade trading capabilities while maintaining the transparency and security of decentralized finance.
+AssetSwap's trading mechanisms represent a revolutionary approach to automated trading, combining advanced order types, intelligent liquidity aggregation, and sophisticated execution strategies. Our system enables institutional-grade trading capabilities while maintaining user control and transparency.
 
 ## Order Types and Execution
 
@@ -377,71 +373,9 @@ class SmartRouter:
 
 ### Cross-Chain Execution
 
-```javascript
-class CrossChainExecutor {
-    async executeCrossChainSwap(params) {
-        const { 
-            sourceChain,
-            targetChain,
-            inputToken,
-            outputToken,
-            amount,
-            user
-        } = params;
-        
-        // Step 1: Find bridge route
-        const bridgeRoute = await this.findBridgeRoute(
-            sourceChain,
-            targetChain,
-            inputToken
-        );
-        
-        // Step 2: Execute source chain swap (if needed)
-        let bridgeToken = inputToken;
-        if (bridgeRoute.requiresSwap) {
-            const swapResult = await this.swapToBridgeToken(
-                inputToken,
-                bridgeRoute.bridgeToken,
-                amount,
-                sourceChain
-            );
-            bridgeToken = bridgeRoute.bridgeToken;
-        }
-        
-        // Step 3: Bridge tokens
-        const bridgeResult = await this.bridge({
-            token: bridgeToken,
-            amount: amount,
-            sourceChain: sourceChain,
-            targetChain: targetChain,
-            recipient: user.wallets[targetChain]
-        });
-        
-        // Step 4: Execute target chain swap (if needed)
-        if (outputToken !== bridgeToken) {
-            await this.swapFromBridgeToken(
-                bridgeToken,
-                outputToken,
-                bridgeResult.amount,
-                targetChain
-            );
-        }
-        
-        return {
-            sourceChain,
-            targetChain,
-            inputAmount: amount,
-            outputAmount: bridgeResult.finalAmount,
-            bridgeFee: bridgeResult.fee,
-            txHashes: {
-                source: swapResult?.txHash,
-                bridge: bridgeResult.txHash,
-                target: targetResult?.txHash
-            }
-        };
-    }
-}
-```
+AssetSwap enables seamless trading across multiple blockchain networks:
+
+**Intelligent Bridge Selection**\n- Automatically identifies optimal bridge routes between chains\n- Considers bridge fees, speed, and security ratings\n- Selects most cost-effective cross-chain execution paths\n\n**Multi-Step Execution**\n- Handles complex multi-chain trading sequences\n- Coordinates swaps and bridges automatically\n- Ensures atomic execution across chain boundaries\n\n**Universal Asset Access**\n- Trade any supported token on any supported chain\n- Automatic token bridging when necessary\n- Unified interface regardless of underlying complexity\n\n**Cost Optimization**\n- Minimizes total fees across all transaction steps\n- Optimizes for speed vs cost based on user preferences\n- Provides transparent fee breakdown before execution
 
 ## Execution Optimization
 

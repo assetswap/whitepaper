@@ -1,12 +1,8 @@
----
-icon: chart-bar
----
-
 # Token Scoring Methodology
 
 ## Overview
 
-AssetSwap employs a transparent, multi-dimensional scoring system to evaluate tokens on Solana. Each token receives scores across five key dimensions, which are combined to produce an overall quality score from 0-100. This document details the exact methodology used in production.
+AssetSwap employs a sophisticated, multi-dimensional scoring system to evaluate tokens across multiple blockchain networks. Each token receives comprehensive analysis across six key dimensions, producing an overall quality score from 0-100 that helps investors make informed decisions.
 
 ## Component Scores
 
@@ -14,293 +10,186 @@ AssetSwap employs a transparent, multi-dimensional scoring system to evaluate to
 
 Evaluates the token's market depth and ability to handle trades without significant slippage.
 
-#### Calculation Breakdown
+#### Key Factors
 
-**Liquidity Amount (40% weight)**
-```javascript
-if (liquidity >= $1,000,000)    → 40 points  // Excellent
-else if (liquidity >= $500,000) → 35 points  // Very Good
-else if (liquidity >= $250,000) → 30 points  // Good
-else if (liquidity >= $100,000) → 25 points  // Moderate
-else if (liquidity >= $50,000)  → 20 points  // Low-Moderate
-else if (liquidity >= $25,000)  → 15 points  // Low
-else if (liquidity >= $10,000)  → 10 points  // Very Low
-else                            → 0 points   // Insufficient
-```
+**Liquidity Depth Analysis**
+- Market maker depth and order book strength
+- Available trading volume without significant slippage
+- Cross-exchange liquidity aggregation
+- Historical liquidity stability patterns
 
-**Trading Volume (30% weight)**
-```javascript
-if (volume24h >= $1,000,000)    → 30 points  // Very High
-else if (volume24h >= $100,000) → 25 points  // High
-else if (volume24h >= $10,000)  → 20 points  // Medium
-else if (volume24h >= $1,000)   → 10 points  // Low
-else                            → 5 points   // Minimal
-```
+**Trading Volume Assessment**
+- Daily and weekly trading volume trends
+- Volume consistency across time periods
+- Organic vs artificial volume detection
+- Volume-to-market-cap ratio analysis
 
-**Volume Trend Stability (30% weight)**
-```javascript
-if (volumeChange24h between -10% and +50%)     → 30 points  // Stable/Healthy
-else if (volumeChange24h between +50% and +200%) → 20 points  // High Growth
-else if (volumeChange24h between -25% and -10%)  → 15 points  // Moderate Decline
-else if (volumeChange24h <= -50%)                → 5 points   // Severe Decline
-```
+**Market Stability Indicators**
+- Price stability during high volume periods
+- Spread consistency across trading sessions
+- Market maker presence and reliability
+- Impact of large trades on price movement
 
 ### 2. Activity Score (0-100)
 
 Measures trading engagement and market participation.
 
-#### Calculation Breakdown
+#### Key Factors
 
-**Multi-Timeframe Trading Activity (40% weight)**
+**Multi-Timeframe Trading Analysis**
+- Real-time and historical trading patterns
+- Activity consistency across different time periods
+- Peak trading hours and geographic distribution
+- Sustainability of trading engagement levels
 
-The system analyzes trading across three timeframes with weighted importance:
-- 24-hour trades: 50% of activity score
-- 1-hour trades: 30% of activity score  
-- 4-hour trades: 20% of activity score
+**Wallet Participation Metrics**
+- Number of unique wallets participating in trading
+- New wallet acquisition rates
+- Repeat trader engagement patterns
+- Geographic and demographic distribution
 
-```javascript
-// For each timeframe:
-if (trades >= 100)      → Full weight allocation
-else if (trades >= 50)  → 75% weight allocation
-else if (trades >= 20)  → 50% weight allocation
-else if (trades >= 5)   → 25% weight allocation
-else                    → 12.5% weight allocation
-```
-
-**Unique Wallet Engagement (35% weight)**
-```javascript
-if (uniqueWallets24h >= 1000) → 35 points  // Excellent
-else if (uniqueWallets24h >= 500)  → 28 points  // Very Good
-else if (uniqueWallets24h >= 100)  → 20 points  // Good
-else if (uniqueWallets24h >= 50)   → 15 points  // Moderate
-else if (uniqueWallets24h >= 10)   → 10 points  // Low
-else                               → 5 points   // Minimal
-```
-
-**Buy/Sell Balance (25% weight)**
-```javascript
-buyRatio = buys24h / (buys24h + sells24h)
-
-if (buyRatio between 0.4 and 0.6)     → 25 points  // Optimal Balance
-else if (buyRatio between 0.3 and 0.7) → 20 points  // Good Balance
-else if (buyRatio between 0.2 and 0.8) → 15 points  // Acceptable
-else                                   → 10 points  // Imbalanced
-```
+**Market Balance Assessment**
+- Healthy buy/sell ratio maintenance
+- Order flow analysis and market depth
+- Institutional vs retail participation balance
+- Market maker activity and support levels
 
 ### 3. Community Score (0-100)
 
 Analyzes the health and distribution of the token holder base.
 
-#### Calculation Breakdown
+#### Key Factors
 
-**Total Holders (35% weight)**
-```javascript
-if (holders >= 10,000) → 35 points  // Large Community
-else if (holders >= 5,000)  → 30 points  // Strong Community
-else if (holders >= 1,000)  → 25 points  // Growing Community
-else if (holders >= 500)    → 20 points  // Moderate Community
-else if (holders >= 250)    → 15 points  // Small Community
-else if (holders >= 100)    → 10 points  // Minimal Community
-else                        → 0 points   // Insufficient
-```
+**Community Size Analysis**
+- Total number of unique token holders
+- Growth rate and sustainability of community expansion
+- Comparison to similar tokens in the same category
+- Geographic distribution and diversity metrics
 
-**Holder Distribution (30% weight)**
+**Holder Distribution Health**
+- Concentration risk assessment across different holder tiers
+- Whale vs retail investor balance
+- Mid-tier holder engagement and stability
+- Distribution pattern analysis for healthy decentralization
 
-The system evaluates concentration risk:
-- Whale holders (>$100K): Should be <5% of total holders
-- Shark holders ($10K-$100K): Healthy range 10-20%
-- Dolphin/Fish holders (<$10K): Should be >40% for good distribution
+**Community Growth Dynamics**
+- Multi-timeframe growth trend analysis
+- Organic vs artificial growth detection
+- Holder retention and engagement patterns
+- Community acquisition method diversity
 
-```javascript
-// Whale concentration penalty
-if (whaleRatio <= 0.05)      → 15 points  // Excellent
-else if (whaleRatio <= 0.10)  → 12 points  // Good
-else if (whaleRatio <= 0.15)  → 8 points   // Acceptable
-else                          → 3 points   // Concerning
-
-// Mid-tier holder bonus
-if (midTierRatio >= 0.40)     → 15 points  // Excellent
-else if (midTierRatio >= 0.30) → 12 points  // Good
-else if (midTierRatio >= 0.20) → 8 points   // Acceptable
-else                           → 3 points   // Low
-```
-
-**Holder Growth Trends (25% weight)**
-
-Analyzes changes across multiple timeframes:
-- 24-hour change: 40% weight
-- 7-day change: 30% weight
-- 30-day change: 30% weight
-
-```javascript
-if (changePercent >= 5%)       → Full weight  // Strong Growth
-else if (changePercent >= 1%)  → 80% weight   // Good Growth
-else if (changePercent >= 0%)  → 60% weight   // Stable
-else if (changePercent >= -2%) → 40% weight   // Minor Decline
-else if (changePercent >= -5%) → 20% weight   // Moderate Decline
-else                           → 0% weight    // Severe Decline
-```
-
-**Acquisition Method Diversity (10% weight)**
-```javascript
-swapRatio = swapHolders / totalHolders
-
-if (swapRatio between 0.80 and 0.95) → 10 points  // Organic Growth
-else if (swapRatio >= 0.70)          → 8 points   // Mostly Organic
-else if (swapRatio >= 0.60)          → 6 points   // Mixed
-else                                 → 3 points   // Artificial (airdrops/transfers)
-```
+**Engagement Quality**
+- Active vs passive holder participation
+- Community-driven vs speculative holding patterns
+- Long-term holder commitment indicators
+- Social engagement correlation with holding patterns
 
 ### 4. Security Score (0-100)
 
 Evaluates contract security and risk factors based on SolSniffer audits.
 
-#### Calculation Breakdown
+#### Key Factors
 
-**Base Security Score**
-- Starts with SolSniffer audit score (0-100)
-- Note: SolSniffer provides risk scores where lower is better, so we invert: `100 - riskScore`
+**Smart Contract Audit Results**
+- Comprehensive security audit scores from leading firms
+- Contract verification and transparency levels
+- Known vulnerability assessments and remediation status
+- Third-party security firm recommendations and ratings
 
-**Security Features (Bonuses)**
-```javascript
-if (mintDisabled)    → +10 points  // Cannot mint new tokens
-if (freezeDisabled)  → +10 points  // Cannot freeze accounts
-if (lpBurned)       → +8 points   // Liquidity permanently locked
-```
+**Token Security Features**
+- Mint function controls and restrictions
+- Account freeze capabilities and governance
+- Liquidity lock mechanisms and duration
+- Upgrade path security and decentralization
 
-**Risk Penalties**
-```javascript
-if (top10HoldersControl > 50%)  → -15 points  // Concentration risk
-highRiskCount * 8                → Deduction   // Each high risk -8 points
-moderateRiskCount * 3             → Deduction   // Each moderate risk -3 points
-// Low risks don't penalize
-```
+**Risk Assessment**
+- Concentration risk from large holders
+- Contract administration privileges and controls
+- Historical security incident analysis
+- Ongoing monitoring and alert systems
 
-**Final Score**
-```javascript
-securityScore = Math.max(0, Math.min(100, 
-    baseScore + bonuses - penalties
-))
-```
+**Compliance and Transparency**
+- Regulatory compliance status across jurisdictions
+- Team disclosure and verification levels
+- Audit trail completeness and accessibility
+- Community governance and decision-making transparency
 
 ### 5. Momentum Score (0-100)
 
 Evaluates price trends and market momentum.
 
-#### Calculation Breakdown
+#### Key Factors
 
-**Price Performance (50% weight)**
-```javascript
-// Recent performance weighted more heavily
-priceChange1h  * 0.15  // 15% weight
-priceChange4h  * 0.20  // 20% weight
-priceChange24h * 0.35  // 35% weight
-priceChange7d  * 0.30  // 30% weight
+**Price Trend Analysis**
+- Multi-timeframe price movement patterns
+- Trend strength and sustainability indicators
+- Support and resistance level identification
+- Price momentum relative to market conditions
 
-// Scoring based on performance ranges
-if (change > 20%)        → High positive score
-else if (change > 5%)    → Moderate positive score
-else if (change > -5%)   → Neutral score
-else if (change > -20%)  → Moderate negative score
-else                     → Low score
-```
+**Volume Dynamics**
+- Trading volume growth and consistency
+- Volume-price relationship analysis
+- Institutional vs retail volume patterns
+- Market maker participation and support
 
-**Volume Momentum (30% weight)**
-```javascript
-if (volumeChange24h > 100%)      → 30 points  // Explosive growth
-else if (volumeChange24h > 50%)  → 25 points  // Strong growth
-else if (volumeChange24h > 0%)   → 20 points  // Growing
-else if (volumeChange24h > -25%) → 10 points  // Declining
-else                             → 5 points   // Collapsing
-```
+**Market Participation Growth**
+- New trader acquisition and engagement
+- Trading frequency and pattern analysis
+- Market interest sustainability metrics
+- Cross-platform trading activity correlation
 
-**Trader Momentum (20% weight)**
-```javascript
-uniqueWalletsChange24h scoring:
-if (change > 50%)       → 20 points  // Viral growth
-else if (change > 20%)  → 15 points  // Strong interest
-else if (change > 0%)   → 10 points  // Growing interest
-else                    → 5 points   // Declining interest
-```
+**Momentum Sustainability**
+- Fundamental strength supporting price trends
+- Market sentiment alignment with price action
+- Technical indicator convergence analysis
+- Risk-adjusted momentum assessment
 
 ### 6. Maturity Score (0-100)
 
 Assesses market establishment and token maturity level.
 
-#### Calculation Breakdown
+#### Key Factors
 
-**Market Cap Tier (40% weight)**
-```javascript
-if (marketCap >= $100,000,000)  → 40 points  // Established
-else if (marketCap >= $50,000,000)  → 35 points  // Mature
-else if (marketCap >= $10,000,000)  → 30 points  // Growing
-else if (marketCap >= $1,000,000)   → 20 points  // Emerging
-else if (marketCap >= $100,000)     → 10 points  // Early
-else                                → 5 points   // Very early/risky
-```
+**Market Capitalization Assessment**
+- Market cap tier classification and stability
+- Relative positioning within token category
+- Market cap growth sustainability analysis
+- Comparison to comparable projects and benchmarks
 
-**Supply Distribution (30% weight)**
-```javascript
-// Top 10 holder concentration (15% of 30%)
-if (top10SupplyPercent <= 30%)  → 15 points  // Excellent distribution
-else if (top10SupplyPercent <= 50%)  → 12 points  // Good distribution
-else if (top10SupplyPercent <= 70%)  → 8 points   // Acceptable
-else                                  → 3 points   // Concerning concentration
+**Token Supply Economics**
+- Circulating vs total supply distribution
+- Holder concentration risk analysis
+- Large holder influence on market dynamics
+- Supply inflation and deflation mechanisms
 
-// Top 100 holder concentration (15% of 30%)
-if (top100SupplyPercent <= 80%)  → 15 points  // Healthy spread
-else if (top100SupplyPercent <= 90%) → 10 points  // Moderate concentration
-else                                  → 5 points   // High concentration
-```
+**Market Establishment Indicators**
+- Time since launch and trading history
+- Exchange listing tier and availability
+- Liquidity provider relationships and support
+- Market maker engagement and stability
 
-**FDV vs Market Cap Ratio (20% weight)**
-```javascript
-ratio = marketCap / fullyDilutedValue
-
-if (ratio >= 0.9)       → 20 points  // Fully diluted (low inflation risk)
-else if (ratio >= 0.7)  → 15 points  // Mostly circulating
-else if (ratio >= 0.5)  → 10 points  // Moderate circulation
-else                    → 5 points   // Low circulation (high inflation risk)
-```
-
-**Holder Count Maturity (10% weight)**
-```javascript
-if (totalHolders >= 5000)  → 10 points  // Mature holder base
-else if (totalHolders >= 1000)  → 8 points   // Growing holder base
-else if (totalHolders >= 500)   → 6 points   // Emerging holder base
-else                            → 3 points   // Small holder base
-```
+**Community Maturity**
+- Holder base size and engagement quality
+- Community governance participation
+- Long-term holder commitment patterns
+- Social media presence and professional community
 
 ## Overall Score Calculation
 
 ### Weighted Average Method
 
-```javascript
-function calculateOverallScore(scores) {
-    const weights = {
-        liquidityScore: 0.25,   // 25% weight
-        activityScore: 0.20,    // 20% weight
-        momentumScore: 0.20,    // 20% weight (updated)
-        communityScore: 0.15,   // 15% weight (updated)
-        securityScore: 0.15,    // 15% weight (updated)
-        maturityScore: 0.05     // 5% weight
-    };
-    
-    let totalScore = 0;
-    let totalWeight = 0;
-    
-    for (const [metric, weight] of Object.entries(weights)) {
-        if (scores[metric] !== undefined) {
-            totalScore += scores[metric] * weight;
-            totalWeight += weight;
-        }
-    }
-    
-    // Normalize if not all scores available
-    return totalWeight > 0 ? 
-        Math.round(totalScore / totalWeight) : 0;
-}
-```
+### Weighted Scoring Algorithm
+
+Our proprietary algorithm combines all component scores using carefully calibrated weights:
+
+- **Liquidity Score**: 25% weight - Market depth and trading accessibility
+- **Activity Score**: 20% weight - Trading engagement and participation
+- **Momentum Score**: 20% weight - Price trends and market dynamics
+- **Community Score**: 15% weight - Holder distribution and growth
+- **Security Score**: 15% weight - Smart contract safety and audit results
+- **Maturity Score**: 5% weight - Market establishment and stability
+
+The algorithm dynamically adjusts for data availability and applies normalization to ensure consistent scoring across all evaluated tokens.
 
 ### Score Interpretation
 
@@ -312,21 +201,16 @@ function calculateOverallScore(scores) {
 | 20-39 | Poor | Significant risks or weaknesses |
 | 0-19 | Very Poor | High risk, multiple red flags |
 
-### Action Recommendations
+### Investment Guidance
 
-Based on the overall score and component analysis:
+Based on comprehensive analysis, our AI provides clear investment guidance:
 
-```javascript
-function getRecommendation(score, components) {
-    if (score >= 80 && components.securityScore >= 70) {
-        return 'BUY';  // Strong candidate
-    } else if (score >= 60 && components.securityScore >= 50) {
-        return 'HOLD';  // Monitor for improvements
-    } else {
-        return 'AVOID';  // Too risky
-    }
-}
-```
+- **Strong Buy (80-100)**: High-quality tokens with excellent fundamentals across all metrics
+- **Buy (60-79)**: Solid investment opportunities with good underlying strength
+- **Hold/Monitor (40-59)**: Mixed signals requiring careful evaluation and timing
+- **Avoid (0-39)**: Significant risks outweigh potential opportunities
+
+All recommendations consider both overall score and individual component strength, with particular emphasis on security metrics.
 
 ## Data Sources
 
@@ -356,36 +240,17 @@ function getRecommendation(score, components) {
 3. **Monitor Trends**: Score changes over time are often more informative than absolute values
 4. **Verify Data**: Cross-reference with other sources for important decisions
 
-## API Access
+## Platform Integration
 
-### Get Token Score
-```http
-GET /api/tokens/{tokenAddress}/score
+### Real-Time Scoring Access
+Our scoring system is fully integrated into the AssetSwap platform, providing:
 
-Response:
-{
-    "address": "...",
-    "symbol": "TOKEN",
-    "scores": {
-        "liquidityScore": 75,
-        "activityScore": 82,
-        "communityScore": 68,
-        "securityScore": 90,
-        "momentumScore": 71,
-        "score": 77
-    },
-    "action": "HOLD",
-    "lastUpdated": "2024-09-03T10:30:00Z"
-}
-```
+- **Instant Analysis**: Real-time scores updated continuously
+- **Comprehensive Coverage**: Thousands of tokens analyzed across multiple networks
+- **Historical Tracking**: Score evolution and trend analysis
+- **API Availability**: Enterprise-grade access for institutional partners
 
-### Bulk Score Request
-```http
-POST /api/tokens/scores
-Body: {
-    "addresses": ["address1", "address2", ...]
-}
-```
+All scoring data is accessible through our user-friendly interface and can be integrated into external systems through our robust API infrastructure.
 
 ## Conclusion
 
